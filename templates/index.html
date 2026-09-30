@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Loan Approval Predictor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <main class="page">
+
+        <section class="card">
+
+            <!-- Header -->
+            <div class="header">
+
+                <div class="icon">₹</div>
+
+                <div>
+                    <h1>Loan Approval</h1>
+                    <p>Check your loan eligibility</p>
+                </div>
+
+            </div>
+
+
+            <!-- Prediction Result -->
+            {% if prediction %}
+
+            <div class="result
+                {% if 'Approved' in prediction %}
+                    approved
+                {% else %}
+                    rejected
+                {% endif %}
+            ">
+
+                <div class="result-top">
+
+                    <div class="result-icon">
+
+                        {% if 'Approved' in prediction %}
+                            ✓
+                        {% else %}
+                            !
+                        {% endif %}
+
+                    </div>
+
+                    <div>
+                        <span class="result-label">
+                            Prediction Result
+                        </span>
+
+                        <h2>{{ prediction }}</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="probability">
+
+                    <span>Approval Probability</span>
+
+                    <strong>{{ probability }}</strong>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- Form -->
+            <form action="/predict" method="POST">
+
+                <div class="form-title">
+                    <h2>Applicant Details</h2>
+                    <p>Enter your information below</p>
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Gender -->
+                    <div class="field">
+
+                        <label>Gender</label>
+
+                        <select name="Gender" required>
+
+                            <option value="">Select gender</option>
+
+                            <option value="1">Male</option>
+
+                            <option value="0">Female</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Married -->
+                    <div class="field">
+
+                        <label>Married</label>
+
+                        <select name="Married" required>
+
+                            <option value="">Select</option>
+
+                            <option value="1">Yes</option>
+
+                            <option value="0">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Dependents -->
+                    <div class="field">
+
+                        <label>Dependents</label>
+
+                        <select name="Dependents" required>
+
+                            <option value="">Select</option>
+
+                            <option value="0">0</option>
+
+                            <option value="1">1</option>
+
+                            <option value="2">2</option>
+
+                            <option value="3">3+</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Education -->
+                    <div class="field">
+
+                        <label>Education</label>
+
+                        <select name="Education" required>
+
+                            <option value="">Select</option>
+
+                            <option value="1">Graduate</option>
+
+                            <option value="0">Not Graduate</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Self Employed -->
+                    <div class="field">
+
+                        <label>Self Employed</label>
+
+                        <select name="Self_Employed" required>
+
+                            <option value="">Select</option>
+
+                            <option value="1">Yes</option>
+
+                            <option value="0">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Applicant Income -->
+                    <div class="field">
+
+                        <label>Applicant Income</label>
+
+                        <input
+                            type="number"
+                            name="ApplicantIncome"
+                            placeholder="e.g. 5000"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Coapplicant Income -->
+                    <div class="field">
+
+                        <label>Coapplicant Income</label>
+
+                        <input
+                            type="number"
+                            name="CoapplicantIncome"
+                            placeholder="e.g. 2000"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Loan Amount -->
+                    <div class="field">
+
+                        <label>Loan Amount</label>
+
+                        <input
+                            type="number"
+                            name="LoanAmount"
+                            placeholder="e.g. 150"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Loan Term -->
+                    <div class="field">
+
+                        <label>Loan Term</label>
+
+                        <select name="Loan_Amount_Term" required>
+
+                            <option value="">Select term</option>
+
+                            <option value="360">360 months</option>
+
+                            <option value="180">180 months</option>
+
+                            <option value="120">120 months</option>
+
+                            <option value="84">84 months</option>
+
+                            <option value="60">60 months</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Credit History -->
+                    <div class="field">
+
+                        <label>Credit History</label>
+
+                        <select name="Credit_History" required>
+
+                            <option value="">Select</option>
+
+                            <option value="1">Good</option>
+
+                            <option value="0">Bad</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Property Area -->
+                    <div class="field full">
+
+                        <label>Property Area</label>
+
+                        <select name="Property_Area" required>
+
+                            <option value="">
+                                Select property area
+                            </option>
+
+                            <option value="Rural">
+                                Rural
+                            </option>
+
+                            <option value="Semiurban">
+                                Semiurban
+                            </option>
+
+                            <option value="Urban">
+                                Urban
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Predict Button -->
+                <button type="submit" class="predict-btn">
+
+                    Predict Loan
+
+                </button>
+
+            </form>
+
+
+            <p class="footer-text">
+                Powered by Machine Learning
+            </p>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
